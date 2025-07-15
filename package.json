@@ -1,0 +1,13 @@
+{
+    "name": "um-sushi-monorepo",
+    "version": "1.0.0",
+    "scripts": {
+        "sync": "node sync-env.js",
+        "dev": "node dev.js",
+        "install:all": "npm install --prefix frontend && npm install --prefix backend",
+        "postinstall": "npm run install:all"
+    },
+    "devDependencies": {
+        "dotenv": "^16.3.1"
+    }
+}
