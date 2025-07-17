@@ -1,0 +1,147 @@
+.headerRoot {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--header-bg);
+  box-shadow: var(--header-shadow);
+}
+
+/* container */
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.75rem 1rem; 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* brand */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+.brandCircle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 0px;    
+  overflow: hidden;         
+  background: transparent;  
+}
+.brandLogo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.brandName {
+  font-size: 2rem; 
+  font-weight: 700;
+  color: var(--brand-text);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* desktop nav */
+.navDesktop {
+  display: none;
+}
+.navList {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.navLink {
+  text-decoration: none;
+  color: #4b5563; /* gray-600 */
+  transition: color .15s ease;
+  font-weight: 500;
+}
+.navLink:hover,
+.navLink:focus {
+  color: var(--brand);
+}
+
+/* actions (cart + hamburger) */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.iconButton {
+  position: relative;
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background .15s ease;
+}
+.iconButton:hover,
+.iconButton:focus-visible {
+  background: rgba(0,0,0,.08);
+  outline: none;
+}
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9999px;
+  background: var(--brand);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* mobile menu panel */
+.mobileMenu {
+  display: none;
+  border-top: 1px solid #e5e7eb;
+  background: var(--header-bg);
+}
+.mobileMenuOpen {
+  display: block;
+}
+.mobileNav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem 1rem;
+}
+.mobileLink {
+  padding: 0.5rem 0;
+  text-decoration: none;
+  color: #4b5563;
+  font-weight: 500;
+  transition: color .15s ease;
+}
+.mobileLink:hover,
+.mobileLink:focus {
+  color: var(--brand);
+}
+
+/* show desktop nav ≥768px */
+@media (min-width: 768px) {
+  .navDesktop {
+    display: block;
+  }
+  .mobileToggle {
+    display: none;
+  }
+  .mobileMenuOpen {
+    display: none; /* never show on desktop */
+  }
+}
