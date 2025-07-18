@@ -1,7 +1,11 @@
 .headerRoot {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;              /* full width */
   z-index: 50;
+  background: var(--header-bg);
+  box-shadow: var(--header-shadow);
   background: var(--header-bg);
   box-shadow: var(--header-shadow);
 }
@@ -24,6 +28,13 @@
   gap: 0.5rem;
   text-decoration: none;
 }
+
+.leftGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .brandCircle {
   display: inline-flex;
   align-items: center;
@@ -45,6 +56,32 @@
   color: var(--brand-text);
   line-height: 1;
   white-space: nowrap;
+}
+
+.backButton {
+  --back-size: 36px;
+  background: #e5e7eb; /*cinza claro*/
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--back-size);
+  height: var(--back-size);
+  border-radius: 50%;
+  color: #374151; /* cinza escuro */
+  transition: color 0.15s ease;
+}
+
+.backButton:hover,
+.backButton:focus-visible {
+  color: #ef4444; /* vermelho destaque */
+  background: rgba(239, 68, 68, 0.12);
+  outline: none;
+  transform: scale(1.05);
 }
 
 /* desktop nav */
@@ -72,6 +109,7 @@
 
 /* actions (cart + hamburger) */
 .actions {
+  overflow: visible;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -80,14 +118,20 @@
   position: relative;
   background: none;
   border: none;
-  padding: 0.25rem;
-  border-radius: 9999px;
+  padding: 4px;
+  margin: 0;
   cursor: pointer;
-  transition: background .15s ease;
+  line-height: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;   
+  border-radius: 50%;
 }
 .iconButton:hover,
 .iconButton:focus-visible {
-  background: rgba(0,0,0,.08);
+  color: #ef4444;
+  background: #e5e7eb;
   outline: none;
 }
 .badge {
@@ -97,13 +141,17 @@
   min-width: 18px;
   height: 18px;
   padding: 0 4px;
-  border-radius: 9999px;
-  background: var(--brand);
+  background: #ef4444;
   color: #fff;
+  border-radius: 999px;
   font-size: 11px;
   font-weight: 700;
-  line-height: 18px;
-  text-align: center;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
 }
 
 /* mobile menu panel */
@@ -143,5 +191,10 @@
   }
   .mobileMenuOpen {
     display: none; /* never show on desktop */
+  }
+  .badge {
+    top: -2px;
+    right: -6px;
+    transform: scale(0.95);
   }
 }

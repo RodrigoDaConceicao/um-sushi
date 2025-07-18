@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { CartProvider } from "@/context/cart-context"
 
 import Header from "../components/header/Header"
 import Footer from "../components/footer/Footer"
@@ -26,11 +27,13 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Header brandName="Um Sushi" cartCount={0} />
-        {children}
-        <Footer/>
-      </body>
+      <CartProvider>
+        <body className={`${geistSans.variable} ${geistMono.variable}`}>
+          <Header />
+          {children}
+          <Footer />
+        </body>
+      </CartProvider>
     </html>
   )
 }

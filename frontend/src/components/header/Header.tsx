@@ -2,51 +2,69 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import Image from "next/image"   
-import { ShoppingCart, Menu, X } from "lucide-react"
+import Image from "next/image"
+import { usePathname, useRouter } from "next/navigation"
+import { ShoppingCart, Menu, X, ArrowLeft } from "lucide-react"
 import styles from "./Header.module.css"
+import { useCart } from "@/context/cart-context"
+
 
 export interface HeaderProps {
-  cartCount?: number
-  onCartClick?: () => void
   links?: Array<{ href: string; label: string }>
   brandName?: string
   brandHref?: string
 }
 
 export default function Header({
-  cartCount = 0,
-  onCartClick,
   links = [
     { href: "/", label: "Início" },
     { href: "/cardapio", label: "Cardápio" },
     { href: "/promocoes", label: "Promoções" },
     { href: "/sobre", label: "Sobre Nós" },
   ],
-  brandName = "Sushi Delícia",
+  brandName = "Um Sushi",
   brandHref = "/",
 }: HeaderProps) {
+  const { getTotalCount } = useCart()
+  const cartQty = getTotalCount()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
   const toggleMobileMenu = () => setIsMobileMenuOpen((v) => !v)
+
+  // --- lógica do botão voltar ---
+  const pathname = usePathname()
+  const router = useRouter()
+  const showBack = pathname !== "/"
+  // -------------------------------
 
   return (
     <header className={styles.headerRoot}>
       <div className={styles.inner}>
-        {/* Brand */}
-        <Link href={brandHref} className={styles.brand}>
-          <span className={styles.brandCircle}>
-            <Image
-              src="/logoUmSushi.svg"      // arquivo em /public
-              alt="Logo Um Sushi"
-              width={40}
-              height={40}
-              className={styles.brandLogo}
-              priority                    // carrega logo cedo
-            />
-          </span>
-          <span className={styles.brandName}>{brandName}</span>
-        </Link>
+        {/* Grupo esquerdo: back (condicional) + brand */}
+        <div className={styles.leftGroup}>
+          {showBack && (
+            <button
+              type="button"
+              aria-label="Voltar"
+              onClick={() => router.back()}
+              className={styles.backButton}
+            >
+              <ArrowLeft size={20} />
+            </button>
+          )}
+          <Link href={brandHref} className={styles.brand}>
+            <span className={styles.brandCircle}>
+              <Image
+                src="/logoUmSushi.svg"
+                alt="Logo Um Sushi"
+                width={40}
+                height={40}
+                className={styles.brandLogo}
+                priority
+              />
+            </span>
+            <span className={styles.brandName}>{brandName}</span>
+          </Link>
+        </div>
 
         {/* Desktop nav */}
         <nav className={styles.navDesktop} aria-label="Navegação principal">
@@ -63,17 +81,14 @@ export default function Header({
 
         {/* Actions */}
         <div className={styles.actions}>
-          <button
-            type="button"
-            aria-label="Abrir carrinho"
-            onClick={onCartClick}
+          <Link
+            href="/carrinho"
+            aria-label="Ir para o carrinho"
             className={styles.iconButton}
           >
             <ShoppingCart size={24} strokeWidth={2} />
-            {cartCount > 0 && (
-              <span className={styles.badge}>{cartCount}</span>
-            )}
-          </button>
+            {cartQty > 0 && <span className={styles.badge}>{cartQty}</span>}
+          </Link>
 
           {/* Mobile toggle */}
           <button
