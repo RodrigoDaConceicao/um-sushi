@@ -1,12 +1,20 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  -brand: #ef4444;          /* vermelho principal */
+  --brand-dark: #dc2626;
+  --brand-text: #1f2937;     /* cinza-escuro */
+  --header-bg: #ffffff;
+  --header-shadow: 0 2px 4px rgba(0,0,0,.08);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --brand-text: #f3f4f6;
+    --header-bg: #1f2937;
+    --header-shadow: 0 2px 4px rgba(0,0,0,.5);
   }
 }
 

@@ -165,3 +165,42 @@ a.secondary {
     filter: invert();
   }
 }
+
+.hero {
+  background: var(--brand, #ef4444);
+  color: #fff;
+  text-align: center;
+  padding: 4rem 1rem 3rem;
+  margin-top: 64px;
+}
+.hero h1 {
+  margin: 0 0 .5rem;
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+.hero p {
+  margin: 0;
+  font-size: 1.125rem;
+  max-width: 40ch;
+  margin-inline: auto;
+}
+
+.featured {
+  margin: 0;                /* remove espaço entre hero e imagem */
+  width: 100%;
+  max-width: none;          /* garante largura total */
+  line-height: 0;           /* remove espaço branco abaixo da img inline */
+  overflow: hidden;         /* segurança se imagem maior */
+  background: transparent;  /* sem fundo */
+  border: 0;
+  border-radius: 0;         /* retinho */
+  box-shadow: none;
+}
+
+.featuredImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0;         /* retinho */
+  object-fit: cover;        /* ignora se usa width real */
+}
