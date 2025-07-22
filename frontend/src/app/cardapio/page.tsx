@@ -62,7 +62,7 @@ const fmtBRL = new Intl.NumberFormat("pt-BR", {
 export default function CardapioPage() {
   const [activeCat, setActiveCat] = useState<CategoryId>("all")
   const { addItem, removeItem, getQty } = useCart()
-  const {data: produtos} = useQuery({
+  const {data: produtos, isLoading, isFetching} = useQuery({
     queryKey: ["produtos"],
     queryFn: () => getMenu(),
   })
@@ -72,13 +72,13 @@ export default function CardapioPage() {
   const filtered = useMemo(() => {
     if (activeCat === "all") return produtos
     return produtos?.filter((p) => p.categoria.includes(activeCat))
-  }, [activeCat])
+  }, [activeCat, produtos])
 
   // Para modo "all" precisamos exibir seções
   const grouped = useMemo(() => {
     if (activeCat !== "all") return null
     return groupsStatic
-  }, [activeCat])
+  }, [activeCat, groupsStatic])
 
   return (
     <div className={styles.pageRoot}>
@@ -89,7 +89,7 @@ export default function CardapioPage() {
       <FilterBar active={activeCat} onChange={setActiveCat} />
 
       {/* Conteúdo */}
-      {activeCat === "all" && grouped
+      { isLoading || isFetching ? "Carregando..." : activeCat === "all" && grouped
         ? (
           <>
             <CategorySection
