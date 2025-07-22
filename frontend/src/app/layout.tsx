@@ -5,6 +5,7 @@ import { CartProvider } from "@/context/cart-context"
 
 import Header from "../components/header/Header"
 import Footer from "../components/footer/Footer"
+import ReactQueryProvider from "@/providers/ReactQuery";
 
 
 const geistSans = Geist({
@@ -27,13 +28,15 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
-      <CartProvider>
-        <body className={`${geistSans.variable} ${geistMono.variable}`}>
-          <Header />
-          {children}
-          <Footer />
-        </body>
-      </CartProvider>
+      <ReactQueryProvider>
+        <CartProvider>
+          <body className={`${geistSans.variable} ${geistMono.variable}`}>
+            <Header />
+            {children}
+            <Footer />
+          </body>
+        </CartProvider>
+      </ReactQueryProvider>
     </html>
   )
 }

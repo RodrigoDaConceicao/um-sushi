@@ -1,11 +1,12 @@
 "use client"
 
-import { useMemo, useState } from "react"
-import Image from "next/image"
-import styles from "./cardapio.module.css"
 import { useCart } from "@/context/cart-context"
 import type { Produto } from "@/data/types"
-import dataRaw from "@/data/cardapio-temp.json"
+import { useQuery } from "@tanstack/react-query"
+import Image from "next/image"
+import { useMemo, useState } from "react"
+import { getMenu } from "./adapters/cardapio"
+import styles from "./cardapio.module.css"
 
 /* ------------------------------------------------------------------
  * Config
@@ -20,9 +21,6 @@ const CATEGORY_OPTIONS = [
 
 type CategoryId = (typeof CATEGORY_OPTIONS)[number]["id"]
 
-// Produtos carregados do JSON
-const PRODUTOS: Produto[] = dataRaw as unknown as Produto[]
-
 /** Mapeia cada produto para uma categoria primária (sushi/bebida/sobremesa/combo).
  *  Se o produto tiver "combo", consideramos combo; senão pega a primeira categoria reconhecida.
  */
@@ -36,21 +34,20 @@ function getPrimaryCategory(p: Produto): Exclude<CategoryId, "all"> {
 }
 
 /** Agrupa produtos por categoria primária. */
-function groupByPrimaryCategory(produtos: Produto[]) {
+function groupByPrimaryCategory(produtos?: Produto[]) {
   const groups: Record<Exclude<CategoryId, "all">, Produto[]> = {
     sushi: [],
     bebida: [],
     sobremesa: [],
     combo: [],
   }
-  produtos.forEach((p) => {
+  produtos?.forEach((p) => {
     const cat = getPrimaryCategory(p)
     groups[cat].push(p)
   })
   return groups
 }
 
-const groupsStatic = groupByPrimaryCategory(PRODUTOS)
 
 /** Formata preço em BRL. */
 const fmtBRL = new Intl.NumberFormat("pt-BR", {
@@ -65,11 +62,16 @@ const fmtBRL = new Intl.NumberFormat("pt-BR", {
 export default function CardapioPage() {
   const [activeCat, setActiveCat] = useState<CategoryId>("all")
   const { addItem, removeItem, getQty } = useCart()
+  const {data: produtos} = useQuery({
+    queryKey: ["produtos"],
+    queryFn: () => getMenu(),
+  })
+  const groupsStatic = groupByPrimaryCategory(produtos)
 
   // Produtos filtrados quando categoria != all
   const filtered = useMemo(() => {
-    if (activeCat === "all") return PRODUTOS
-    return PRODUTOS.filter((p) => p.categoria.includes(activeCat))
+    if (activeCat === "all") return produtos
+    return produtos?.filter((p) => p.categoria.includes(activeCat))
   }, [activeCat])
 
   // Para modo "all" precisamos exibir seções
@@ -191,7 +193,7 @@ function FilterBar({ active, onChange }: FilterBarProps) {
  * ------------------------------------------------------------------*/
 interface CategorySectionProps {
   title: string
-  produtos: Produto[]
+  produtos?: Produto[]
   getQty: (id: number) => number
   addItem: (p: Produto, qty?: number) => void
   removeItem: (id: number, qty?: number) => void
@@ -204,7 +206,7 @@ function CategorySection({
   addItem,
   removeItem,
 }: CategorySectionProps) {
-  if (!produtos.length) return null
+  if ( !produtos || !produtos.length) return null
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>{title}</h2>
