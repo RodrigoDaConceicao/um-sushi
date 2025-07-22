@@ -1,31 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { MenuItemDto } from './menu-item.dto';
+import { join } from 'path';
+import { readFileSync } from 'fs';
 
 @Injectable()
 export class AppService {
-  private menu: MenuItemDto[] = [
-    {
-      id: 1,
-      nome: 'Sushi Tradicional',
-      preco: 20.5,
-      imagem:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM-YPG7Z-r0aW53ErFeePTwzynWBRzrKPimA&s',
-    },
-    {
-      id: 2,
-      nome: 'Sashimi',
-      preco: 21.0,
-      imagem:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM-YPG7Z-r0aW53ErFeePTwzynWBRzrKPimA&s',
-    },
-    {
-      id: 3,
-      nome: 'Combinado',
-      preco: 65.0,
-      imagem:
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM-YPG7Z-r0aW53ErFeePTwzynWBRzrKPimA&s',
-    },
-  ];
+  private menu = JSON.parse(
+    readFileSync(join(__dirname, '..', 'cardapio-temp.json'), 'utf8'),
+  );
   private globalOrderId = 1;
   private orders: any[] = [];
 
