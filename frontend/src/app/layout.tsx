@@ -1,11 +1,12 @@
+import { CartProvider } from "@/context/cart-context";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { CartProvider } from "@/context/cart-context"
 
-import Header from "../components/header/Header"
-import Footer from "../components/footer/Footer"
 import ReactQueryProvider from "@/providers/ReactQuery";
+import { ToastContainer } from "react-toastify";
+import Footer from "../components/footer/Footer";
+import Header from "../components/header/Header";
 
 
 const geistSans = Geist({
@@ -30,6 +31,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <ReactQueryProvider>
         <CartProvider>
+          <ToastContainer />
           <body className={`${geistSans.variable} ${geistMono.variable}`}>
             <Header />
             {children}

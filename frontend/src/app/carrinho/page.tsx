@@ -1,10 +1,13 @@
 'use client'
 import { useCart } from "@/context/cart-context"
 import { Produto } from "@/data/types"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { useMemo } from "react"
+import { toast } from "react-toastify"
 import { getMenu } from "../cardapio/adapters/cardapio"
+import { sendOrder } from "./adapters/pedido"
 import styles from "./carrinho.module.css"
 
 function Hero() {
@@ -30,11 +33,12 @@ function Hero() {
   )
 }
 export default function CarrinhoPage() {
-    const { addItem, removeItem, getQty, getTotalCount, items } = useCart()
-    const {data: produtos, isLoading, isFetching} = useQuery({
+    const { addItem, removeItem, getQty, getTotalCount, items, clear } = useCart()
+    const {data: produtos} = useQuery({
         queryKey: ["produtos"],
         queryFn: () => getMenu(),
     })
+    const router = useRouter()
 
     const filtered = useMemo(() => {
         const selectedItensId = Object.keys(items)
@@ -42,7 +46,17 @@ export default function CarrinhoPage() {
         return produtos?.filter((p) => selectedItensId.includes(p.id.toString()))
     }, [items, produtos])
 
-    console.log(filtered)
+    const mutate = useMutation({
+        mutationFn: () => sendOrder(filtered?.map((p) => ({produtoId: p.id, quantidade: getQty(p.id)})) || []),
+        onSuccess: () => {
+            toast.success("Pedido enviado com sucesso!")
+            clear()
+            router.back()
+        },
+        onError: () => {
+            toast.error("Erro ao enviar pedido, tente novamente mais tarde.")
+        }
+    })
     
     return (
         <div className={styles.pageRoot}>
@@ -70,7 +84,7 @@ export default function CarrinhoPage() {
                         <span>Total</span>
                         <span>{fmtBRL.format(filtered?.map((p) => p.preco * getQty(p.id)).reduce((a, b) => a + b, 0) ?? 0)}</span>
                     </div>
-                    <button className={styles.checkoutBtn}>Finalizar Compra</button>
+                    <button className={styles.checkoutBtn} onClick={() => mutate.mutate()}>Finalizar Compra</button>
                 </div>
                 </>
             }
