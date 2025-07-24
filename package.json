@@ -5,9 +5,13 @@
         "sync": "node sync-env.js",
         "dev": "node dev.js",
         "install:all": "npm install --prefix frontend && npm install --prefix backend",
-        "postinstall": "npm run install:all"
+        "postinstall": "echo \"(pulado)\""
     },
     "devDependencies": {
         "dotenv": "^16.3.1"
+    },
+    "dependencies": {
+        "class-transformer": "^0.5.1",
+        "class-validator": "^0.14.2"
     }
 }
